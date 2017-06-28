@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-css/1.4.6/select2-bootstrap.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+        <link href= "{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <a href="/blog" class="text-left">BLOG</a>
+        <a href="/newpost" class="text-right">ADD A POST</a>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        <ul>
+            {% for category, message in messages %}
+            <li class="{{ category }}">
+                <em>{{ message }}</em>
+            </li>
+            {% endfor %}
+        </ul>
+
+
+        {% endwith %}
+        {% block content %}
+
+        {% endblock %}
+    </body>
+</html>
