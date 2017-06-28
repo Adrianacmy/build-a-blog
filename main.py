@@ -24,20 +24,23 @@ class Post(db.Model):
         self.pub_data = pub_data
 
 
+@app.route('/')
+def index():
+    return redirect('/blog')
+
 
 @app.route('/blog', methods=['POST', 'GET'])
-def index():
-
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-        if title and body:
-            newpost = Post(title, body)
-            db.session.add(newpost)
-            db.session.commit()
-        else:
-            flash("Title and body can not be empty.")
-            return render_template("newpost.html", title=title, body=body)
+def display_blog():
+    # if request.method == 'POST':
+    #     title = request.form['title']
+    #     body = request.form['body']
+    #     if title and body:
+    #         newpost = Post(title, body)
+    #         db.session.add(newpost)
+    #         db.session.commit()
+    #     else:
+    #         flash("Title and body can not be empty.")
+    #         return render_template("newpost.html", title=title, body=body)
 
     posts = Post.query.all()
     return render_template('posts.html', posts=posts)
@@ -64,7 +67,6 @@ def newpost():
 @app.route('/post', methods=['GET'])
 def single_post():
     id = request.args.get('id')
-    print(id)
     post = Post.query.filter_by(id=id).first()
 
     return render_template('post.html', post=post)
