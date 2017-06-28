@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, flash
+from flask import Flask, request, redirect, render_template, session, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -52,12 +52,22 @@ def newpost():
             newpost = Post(title, body)
             db.session.add(newpost)
             db.session.commit()
+            return redirect('/post?id='+str(newpost.id))
         else:
             flash("Title and body can not be empty.", "warning")
             return render_template("newpost.html", title=title, body=body)
-        return redirect('/')
+
     else:
         return render_template("newpost.html")
+
+
+@app.route('/post', methods=['GET'])
+def single_post():
+    id = request.args.get('id')
+    print(id)
+    post = Post.query.filter_by(id=id).first()
+
+    return render_template('post.html', post=post)
 
 
 if __name__ == "__main__":
