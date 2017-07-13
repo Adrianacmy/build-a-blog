@@ -3,7 +3,7 @@
 {% block content %}
     <h2>ADD A POST</h2>
     <hr>
-    <form action="/newpost">
+    <form action="/newpost" method="POST">
         <input type="text" name="title" placeholder="Your awesome title*" value="{{ title }}" /><br>
         <input type="date" name="pub_date" value="{{ pub_date }}" placeholder="publish date" /><br>
         <textarea rows="20" cols="60" placeholder="Anything you want to say*" name="body" value="{{ body }}"></textarea><br><br>
