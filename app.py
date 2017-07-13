@@ -34,19 +34,19 @@ def index():
     # return resp
 
     resp = make_response(redirect('/blog'))
-    resp.set_cookie['visit_count'] = str(count)
+    resp.headers['visit_count'] = str(count)
     return resp
 
 
-@app.route('/blog', methods=['GET'])
-@app.route('/blog/<id>', methods=['GET'])
+@app.route('/blog')
+@app.route('/blog/<id>')
 def display_blog():
     if request.args:
         id = request.args.get('id')
         post = Post.query.filter_by(id=id).first()
         return render_template('single_post.html', post=post)
     else:
-        posts = Post.query.all()
+        posts = Post.query.order_by(Post.pub_date.desc()).all()
         return render_template('posts.html', posts=posts)
 
 
