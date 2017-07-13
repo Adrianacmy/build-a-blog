@@ -9,7 +9,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
         <link href= "{{ url_for('static',filename='styles/main.css') }}" rel="stylesheet">
     </head>
-    <body>
+    <body class="container">
         <a href="/blog" class="text-left">BLOG</a>
         <a href="/newpost" class="text-right">ADD A POST</a>
         {% with messages = get_flashed_messages(with_categories=True) %}
