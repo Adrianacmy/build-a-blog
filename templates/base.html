@@ -12,8 +12,10 @@
     </head>
     </head>
     <body class="container">
-        <span><a href="/blog" class="text-left">BLOG</a></span>
-        <span><a href="/newpost" class="text-right">ADD A POST</a></span>
+        <nav>
+            <span><a href="/blog" class="text-left">BLOG</a></span>
+            <span class="addpost"><a href="/newpost">ADD A POST</a></span>
+        </nav>
         {% with messages = get_flashed_messages(with_categories=True) %}
         <ul>
             {% for category, message in messages %}
