@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash, url_for, make_response
 from flask_sqlalchemy import SQLAlchemy
-import datetime
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -14,14 +14,14 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.Text)
-    pub_data = db.Column(db.DateTime)
+    pub_date = db.Column(db.DateTime)
 
-    def __init__(self, title, body, pub_data=None):
+    def __init__(self, title, body, pub_date=None):
         self.title = title
         self.body = body
-        if pub_data is None:
-            pub_data = datetime.utcnow()
-        self.pub_data = pub_data
+        if not pub_date:
+            pub_date = datetime.utcnow()
+        self.pub_date = pub_date
 
 
 @app.route('/')
@@ -34,14 +34,20 @@ def index():
     # return resp
 
     resp = make_response(redirect('/blog'))
-    resp.headers['visit_count'] = str(count)
+    resp.set_cookie['visit_count'] = str(count)
     return resp
 
 
 @app.route('/blog', methods=['GET'])
+@app.route('/blog/<id>', methods=['GET'])
 def display_blog():
-    posts = Post.query.all()
-    return render_template('posts.html', posts=posts)
+    if request.args:
+        id = request.args.get('id')
+        post = Post.query.filter_by(id=id).first()
+        return render_template('single_post.html', post=post)
+    else:
+        posts = Post.query.all()
+        return render_template('posts.html', posts=posts)
 
 
 @app.route("/newpost", methods=['GET', 'POST'])
@@ -55,7 +61,7 @@ def newpost():
             newpost = Post(title, body)
             db.session.add(newpost)
             db.session.commit()
-            return redirect('/single_post?id='+str(newpost.id))
+            return redirect('/blog?id='+str(newpost.id))
         else:
             flash("Title and body can not be empty.", "warning")
             return render_template("newpost.html", title=title, body=body, pub_date=pub_date)
@@ -64,12 +70,12 @@ def newpost():
         return render_template("newpost.html")
 
 
-@app.route('/single_post', methods=['GET'])
-def single_post():
-    id = request.args.get('id')
-    single_post = Post.query.filter_by(id=id).first()
+# @app.route('/single_post', methods=['GET'])
+# def single_post():
+#     id = request.args.get('id')
+#     single_post = Post.query.filter_by(id=id).first()
 
-    return render_template('single_post.html', post=single_post)
+#     return render_template('single_post.html', post=single_post)
 
 
 if __name__ == "__main__":
